@@ -33,7 +33,7 @@ function createGameboard() {
     function checkWinner(symbol) { 
     for (let i = 0; i < 3; i++) {
         if (board[i].every(cell => cell === symbol)) return true
-        if (board.map(row => row[i] === symbol)) return true
+        if (board.map(row => row[i]).every(cell => cell === symbol))return true
     }
 
     if ([1, 2, 3].every(i => board[i][i] === symbol)) return true
@@ -74,6 +74,49 @@ function gameLoop() {
 
         const confirmedMove = game.updateGameboard(x, y, currentPlayer.symbol);
         if (!confirmedMove) continue
+        
+        if (game.checkWinner(currentPlayer.symbol)) {
+            game.displayGameboard();
+            console.log(`${currentPlayer.name} wins!`);
+            break;
+        }
+
+        if(game.isBoardFull() === true) {
+            game.displayGameboard();
+            console.log("It's a tie!");
+            break
+        }
+
+        currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
     }
 }
 
+const container = document.querySelector(".container");
+
+//create divs with game board cell index references
+
+for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+        const div = document.createElement('div')
+        div.id = `cell-${i}-${j}`
+        div.classList.add('board-cell')
+        div.textContent = `${i}, ${j}`;
+        div.dataset.x = `${i}`
+        div.dataset.y = `${j}`
+        container.appendChild(div);
+
+    }
+};
+
+//Event delegation on container to update text content of each div
+container.addEventListener("click", function(event) {
+    event.target.textContent = "x"
+})
+
+
+//Update gameboard based on which div is clicked. Associated by unique x and y dataset values that were created for each div. Call updateGameboard function
+container.addEventListener("click", function(event) {
+    const x = event.target.dataset.x;
+    const y = event.target.dataset.y;
+    game.updateGameboard(x, y, "X")
+});
