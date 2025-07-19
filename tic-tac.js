@@ -48,49 +48,24 @@ function createGameboard() {
 
     return {board, displayGameboard, updateGameboard, checkWinner, isBoardFull}
 };
-createGameboard()
 
 function createPlayers(name, symbol) {
     return {name, symbol};
 };
 
 
+const playerOne = createPlayers("Player One", "X");
+const playerTwo = createPlayers("Player Two", "O");
+let currentPlayer = playerOne;
 
-function gameLoop() {
-    const playerOne = createPlayers("Player One", "X");
-    const playerTwo = createPlayers("Player Two", "O");
-    let currentPlayer = playerOne;
+function gameStart() {
+    
+    game.displayGameboard();
+    console.log(`${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`)
+    
+};
+    
 
-    while(true) {
-        game.displayGameboard();
-        console.log(`${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`)
-        const x = parseInt(prompt("Select a row (0-2):"))
-        const y = parseInt(prompt("Select a column (0-2):"))
-
-        if (isNaN(x) || isNaN(y) || x > 2 || y > 2 || x < 0 || y < 0) {
-            console.log("Pick a valid cell.");
-            continue
-        };
-
-        const confirmedMove = game.updateGameboard(x, y, currentPlayer.symbol);
-        if (!confirmedMove) continue
-        
-        if (game.checkWinner(currentPlayer.symbol)) {
-            game.displayGameboard();
-            console.log(`${currentPlayer.name} wins!`);
-            break;
-        }
-
-        if(game.isBoardFull() === true) {
-            game.displayGameboard();
-            console.log("It's a tie!");
-            break
-        }
-
-        currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
-        
-    }
-}
 
 const container = document.querySelector(".container");
 
@@ -109,18 +84,38 @@ for (let i = 0; i < 3; i++) {
     }
 };
 
-//Event delegation on container to update text content of each div
-container.addEventListener("click", function(event) {
-    event.target.textContent = "x"
-})
 
 
 //Update gameboard based on which div is clicked. Associated by unique x and y dataset values that were created for each div. Call updateGameboard function
-container.addEventListener("click", function(event) {
+  container.addEventListener("click", function(event) {
     const x = event.target.dataset.x;
     const y = event.target.dataset.y;
-    game.updateGameboard(x, y, "X")
-});
+
+    const openCell = game.updateGameboard(x, y, currentPlayer.symbol);
+
+    if (!openCell) return
+    event.target.textContent = currentPlayer.symbol
+
+        if (game.checkWinner(currentPlayer.symbol)) {
+            game.displayGameboard();
+            console.log(`${currentPlayer.name} wins!`);
+            return
+         }
+
+        if(game.isBoardFull() === true) {
+            game.displayGameboard();
+            console.log("It's a tie!");
+            return
+            
+        }
+    currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
+    game.displayGameboard()
+    console.log(`${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`)
+    
+    }   
+
+   
+);
 
 const startButton = document.createElement("button")
 startButton.classList.add('start-button')
@@ -128,5 +123,6 @@ startButton.textContent = "Start Game"
 document.body.append(startButton)
 
 startButton.addEventListener('click', function() {
-    gameLoop();
+    gameStart();
 })
+
