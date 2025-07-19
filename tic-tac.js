@@ -59,8 +59,6 @@ const playerTwo = createPlayers("Player Two", "O");
 let currentPlayer = playerOne;
 
 function gameStart() {
-    
-    game.displayGameboard();
     console.log(`${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`)
     
 };
@@ -125,4 +123,19 @@ document.body.append(startButton)
 startButton.addEventListener('click', function() {
     gameStart();
 })
+
+function resetBoard() {
+    for (let i = 0; i < 3; i++){
+        for (let j = 0; j < 3; j++) {
+            game.board[i][j] = ""
+        }
+    }
+    const boardCells = document.querySelectorAll('.board-cell')
+    boardCells.forEach(cell => cell.textContent = "")
+
+    currentPlayer = playerOne;
+    console.log(`${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`)
+};
+
+
 
