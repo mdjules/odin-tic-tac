@@ -88,6 +88,7 @@ function gameLoop() {
         }
 
         currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
+        
     }
 }
 
@@ -120,3 +121,12 @@ container.addEventListener("click", function(event) {
     const y = event.target.dataset.y;
     game.updateGameboard(x, y, "X")
 });
+
+const startButton = document.createElement("button")
+startButton.classList.add('start-button')
+startButton.textContent = "Start Game"
+document.body.append(startButton)
+
+startButton.addEventListener('click', function() {
+    gameLoop();
+})
