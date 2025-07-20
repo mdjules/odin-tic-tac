@@ -76,7 +76,6 @@ for (let i = 0; i < 3; i++) {
         const div = document.createElement('div')
         div.id = `cell-${i}-${j}`
         div.classList.add('board-cell')
-        div.textContent = `${i}, ${j}`;
         div.dataset.x = `${i}`
         div.dataset.y = `${j}`
         container.appendChild(div);
@@ -124,7 +123,7 @@ document.body.append(startButton)
 
 startButton.addEventListener('click', function() {
     resetBoard()
-    gameStart();
+    gameStart();    
 })
 
 function resetBoard() {
