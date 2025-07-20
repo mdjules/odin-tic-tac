@@ -34,10 +34,12 @@ function createGameboard() {
     for (let i = 0; i < 3; i++) {
         if (board[i].every(cell => cell === symbol)) return true
         if (board.map(row => row[i]).every(cell => cell === symbol))return true
+
+        if ([0, 1, 2].every(i => board[i][i] === symbol)) return true
+        if ([0, 1, 2].every(i => board[i][2-i] === symbol)) return true
     }
 
-    if ([1, 2, 3].every(i => board[i][i] === symbol)) return true
-    if ([1, 2, 3].every(i => board[i][2-i] === symbol)) return true
+   
 
     return false
 }
@@ -59,7 +61,7 @@ const playerTwo = createPlayers("Player Two", "O");
 let currentPlayer = playerOne;
 
 function gameStart() {
-    console.log(`${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`)
+    message.textContent = `${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`
     
 };
     
@@ -96,19 +98,19 @@ for (let i = 0; i < 3; i++) {
 
         if (game.checkWinner(currentPlayer.symbol)) {
             game.displayGameboard();
-            console.log(`${currentPlayer.name} wins!`);
+            message.textContent = `${currentPlayer.name} wins!`;
             return
          }
 
         if(game.isBoardFull() === true) {
             game.displayGameboard();
-            console.log("It's a tie!");
+            message.textContent = "It's a tie!";
             return
             
         }
     currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
     game.displayGameboard()
-    console.log(`${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`)
+    message.textContent = `${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`
     
     }   
 
@@ -121,6 +123,7 @@ startButton.textContent = "Start Game"
 document.body.append(startButton)
 
 startButton.addEventListener('click', function() {
+    resetBoard()
     gameStart();
 })
 
@@ -134,8 +137,14 @@ function resetBoard() {
     boardCells.forEach(cell => cell.textContent = "")
 
     currentPlayer = playerOne;
-    console.log(`${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`)
+    message.textContent = `${currentPlayer.name}'s turn to place an ${currentPlayer.symbol}.`
 };
 
+
+let message = document.createElement("p");
+
+message.classList.add("message")
+message.textContent = "Click Start Game button to continue"
+container.append(message)
 
 
