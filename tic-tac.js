@@ -144,7 +144,7 @@ function resetBoard() {
 let message = document.createElement("p");
 
 message.classList.add("message")
-message.textContent = "Click Start Game button to continue"
+message.textContent = ""
 container.append(message)
 
 
